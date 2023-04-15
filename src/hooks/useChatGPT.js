@@ -3,6 +3,7 @@ import { useState, useCallback } from "react";
 import { PromptTemplate } from "langchain";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { HumanChatMessage } from "langchain/schema";
+import axios from "axios";
 
 const complexityDefinitions = [
   "At this level, the chord progressions are simple, mostly consisting of triads, primarily using the I, IV, and V chords in the given key. These progressions are suitable for beginners and are commonly found in popular and folk music.",
@@ -43,28 +44,13 @@ const useChatGPT = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const model = new ChatOpenAI({
-        temperature: 0,
-        openAIApiKey: process.env.REACT_APP_OPENAI_API_KEY,
-        modelName: process.env.REACT_APP_OPENAI_API_MODEL,
+      const response = await axios.post(process.env.REACT_APP_LAMBDA_API_URL, {
+        songParameters,
+        userPrompt,
       });
 
-      const filledPrompt = await promptTemplate.format({
-        complexity: songParameters.complexity,
-        complexity_definition:
-          complexityDefinitions[songParameters.complexity - 1],
-        key: songParameters.key,
-        tempo: songParameters.tempo,
-        number_of_bars: songParameters.number_of_bars,
-        user_prompt: userPrompt,
-      });
-
-      console.log(filledPrompt);
-
-      const response = await model.call([new HumanChatMessage(filledPrompt)]);
-      if (response) {
-        console.log(response.text);
-        setChordProgression(response.text);
+      if (response.data && response.data.chordProgression) {
+        setChordProgression(response.data.chordProgression);
       }
     } catch (err) {
       console.error(err);
