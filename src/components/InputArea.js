@@ -25,6 +25,8 @@ const InputArea = ({
   userPrompt,
   setUserPrompt,
   generateChordProgression,
+  isPlaying,
+  isLoading,
 }) => {
   const handleInputChange = (event, parameter) => {
     setSongParameters({
@@ -56,12 +58,31 @@ const InputArea = ({
           value={userPrompt}
           onChange={handleUserPromptChange}
           placeholder="Enter a creative description for your chord progression"
+          style={{
+            opacity: isPlaying | isLoading ? 0.5 : 1,
+            cursor: isPlaying | isLoading ? "not-allowed" : "text",
+          }}
+          readOnly={isPlaying | isLoading}
         />
-        <FaDice className="dice-icon" onClick={handleDiceClick} />
+        <FaDice
+          className="dice-icon"
+          onClick={handleDiceClick}
+          style={{
+            opacity: isPlaying | isLoading ? 0.5 : 1,
+            cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
+          }}
+        />
       </div>
       <div className="input-row">
         <div className="control-group">
-          <label className="input-label" htmlFor="complexity">
+          <label
+            className="input-label"
+            htmlFor="complexity"
+            style={{
+              opacity: isPlaying | isLoading ? 0.5 : 1,
+              cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
+            }}
+          >
             Complexity: {songParameters.complexity}
           </label>
           <input
@@ -72,10 +93,22 @@ const InputArea = ({
             max="5"
             value={songParameters.complexity}
             onChange={(e) => handleInputChange(e, "complexity")}
+            style={{
+              opacity: isPlaying | isLoading ? 0.5 : 1,
+              cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
+            }}
+            disabled={isPlaying | isLoading}
           />
         </div>
         <div className="control-group">
-          <label className="input-label" htmlFor="tempo">
+          <label
+            className="input-label"
+            htmlFor="tempo"
+            style={{
+              opacity: isPlaying | isLoading ? 0.5 : 1,
+              cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
+            }}
+          >
             Tempo: {songParameters.tempo} BPM
           </label>
           <input
@@ -86,12 +119,24 @@ const InputArea = ({
             max="240"
             value={songParameters.tempo}
             onChange={(e) => handleInputChange(e, "tempo")}
+            style={{
+              opacity: isPlaying | isLoading ? 0.5 : 1,
+              cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
+            }}
+            disabled={isPlaying | isLoading}
           />
         </div>
       </div>
       <div className="input-row">
         <div className="control-group">
-          <label className="input-label" htmlFor="key">
+          <label
+            className="input-label"
+            htmlFor="key"
+            style={{
+              opacity: isPlaying | isLoading ? 0.5 : 1,
+              cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
+            }}
+          >
             Key
           </label>
           <select
@@ -99,6 +144,11 @@ const InputArea = ({
             id="key"
             value={songParameters.key}
             onChange={(e) => handleInputChange(e, "key")}
+            style={{
+              opacity: isPlaying | isLoading ? 0.5 : 1,
+              cursor: isPlaying | isLoading ? "not-allowed" : "auto",
+            }}
+            disabled={isPlaying | isLoading}
           >
             {allKeys.map((key, index) => (
               <option key={index} value={key}>
@@ -108,7 +158,14 @@ const InputArea = ({
           </select>
         </div>
         <div className="control-group">
-          <label className="input-label" htmlFor="number-of-bars">
+          <label
+            className="input-label"
+            htmlFor="number-of-bars"
+            style={{
+              opacity: isPlaying | isLoading ? 0.5 : 1,
+              cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
+            }}
+          >
             Number of bars
           </label>
           <input
@@ -119,10 +176,24 @@ const InputArea = ({
             max="64"
             value={songParameters.number_of_bars}
             onChange={(e) => handleInputChange(e, "number_of_bars")}
+            style={{
+              opacity: isPlaying | isLoading ? 0.5 : 1,
+              cursor: isPlaying | isLoading ? "not-allowed" : "text",
+            }}
+            readOnly={isPlaying | isLoading}
+            disabled={isPlaying | isLoading}
           />
         </div>
       </div>
-      <button className="generate-btn" onClick={handleButtonClick}>
+      <button
+        className="generate-btn"
+        onClick={handleButtonClick}
+        style={{
+          opacity: isPlaying | isLoading ? 0.5 : 1,
+          cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
+        }}
+        disabled={isPlaying | isLoading}
+      >
         Generate Chords
       </button>
     </div>

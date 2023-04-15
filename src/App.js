@@ -18,7 +18,6 @@ const globalStyles = css`
 `;
 
 function App() {
-  const apiKey = process.env.REACT_APP_CHATGPT_API_KEY;
   const {
     songParameters,
     setSongParameters,
@@ -28,11 +27,12 @@ function App() {
     setChordProgression,
     generateChordProgression,
     isLoading,
-    error,
-  } = useChatGPT(apiKey);
+  } = useChatGPT();
 
-  const { playMidi, downloadMidi, selectInstrument } =
-    useMidi(chordProgression);
+  const { playMidi, downloadMidi, selectInstrument, isPlaying } = useMidi(
+    chordProgression,
+    songParameters.tempo
+  );
 
   return (
     <div>
@@ -46,6 +46,8 @@ function App() {
         userPrompt={userPrompt}
         setUserPrompt={setUserPrompt}
         generateChordProgression={generateChordProgression}
+        isPlaying={isPlaying}
+        isLoading={isLoading}
       />
       <OutputArea
         chordProgression={chordProgression}
@@ -53,6 +55,8 @@ function App() {
         playMidi={playMidi}
         downloadMidi={downloadMidi}
         selectInstrument={selectInstrument}
+        isPlaying={isPlaying}
+        isLoading={isLoading}
       />
     </div>
   );
