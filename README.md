@@ -32,7 +32,7 @@ yarn install
 - Your `.env` file should look like this:
 
 ```
-REACT_APP_OPENAI_API_KEY=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
+REACT_APP_OPENAI_API_KEY=your_api_key_here
 REACT_APP_OPENAI_API_MODEL=gpt-3.5-turbo
 ```
 
