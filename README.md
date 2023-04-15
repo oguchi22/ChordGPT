@@ -2,7 +2,7 @@
 
 ChordGPT is a web application for music creators and performers that generates chord progressions based on user-defined parameters and prompts. It utilizes OpenAI's ChatGPT API to create musically interesting and harmonically rich chord progressions suitable for various complexity levels, keys, tempos, and lengths.
 
-ChordGPT Screenshot
+![ChordGPT Screenshot](images/screenshot.png)
 
 ## Installation and Usage
 
