@@ -18,7 +18,7 @@ const useMidi = (chordProgression, tempo) => {
 
   useEffect(() => {
     const loadMetronomeBuffer = async () => {
-      const buffer = await Tone.Buffer.load("/audio/metronome.mp3");
+      const buffer = await Tone.Buffer.load("audio/metronome.mp3");
       setMetronomeBuffer(buffer);
     };
 
