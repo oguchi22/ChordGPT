@@ -1,6 +1,7 @@
 {
   "name": "chord-gpt",
   "version": "0.1.0",
+  "homepage": "https://oguchi22.github.io/ChordGPT",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.6",
@@ -25,6 +26,8 @@
     "webmidi": "^3.1.5"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
