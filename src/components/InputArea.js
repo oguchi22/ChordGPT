@@ -172,8 +172,8 @@ const InputArea = ({
             className="text-input"
             id="number-of-bars"
             type="number"
-            min="1"
-            max="64"
+            min="4"
+            max="32"
             value={songParameters.number_of_bars}
             onChange={(e) => handleInputChange(e, "number_of_bars")}
             style={{
