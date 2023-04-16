@@ -1,18 +1,15 @@
 {
   "files": {
     "main.css": "/ChordGPT/static/css/main.cf0008ba.css",
-    "main.js": "/ChordGPT/static/js/main.087b6ecf.js",
-    "static/js/754.89e6a9cc.chunk.js": "/ChordGPT/static/js/754.89e6a9cc.chunk.js",
+    "main.js": "/ChordGPT/static/js/main.552ba3cc.js",
     "static/js/787.86438523.chunk.js": "/ChordGPT/static/js/787.86438523.chunk.js",
-    "static/media/tiktoken_bg.wasm": "/ChordGPT/static/media/tiktoken_bg.b1e5ae09ac0a1cf4f755.wasm",
     "index.html": "/ChordGPT/index.html",
     "main.cf0008ba.css.map": "/ChordGPT/static/css/main.cf0008ba.css.map",
-    "main.087b6ecf.js.map": "/ChordGPT/static/js/main.087b6ecf.js.map",
-    "754.89e6a9cc.chunk.js.map": "/ChordGPT/static/js/754.89e6a9cc.chunk.js.map",
+    "main.552ba3cc.js.map": "/ChordGPT/static/js/main.552ba3cc.js.map",
     "787.86438523.chunk.js.map": "/ChordGPT/static/js/787.86438523.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.cf0008ba.css",
-    "static/js/main.087b6ecf.js"
+    "static/js/main.552ba3cc.js"
   ]
 }
