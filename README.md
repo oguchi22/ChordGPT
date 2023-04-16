@@ -48,3 +48,9 @@ Open your web browser and navigate to http://localhost:3000 to use the applicati
 
 - Generate chord progressions based on complexity level, key, tempo, and length
 - Play and download generated chord progressions as MIDI files
+
+## Demo
+
+A live demo of ChordGPT is available for demonstration purposes. You can try out the application and see it in action by visiting the following link:
+
+ChordGPT Demo[https://oguchi22.github.io/ChordGPT/]
