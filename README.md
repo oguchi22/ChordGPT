@@ -54,3 +54,7 @@ Open your web browser and navigate to http://localhost:3000 to use the applicati
 A live demo of ChordGPT is available for demonstration purposes. You can try out the application and see it in action by visiting the following link:
 
 [ChordGPT Demo](https://oguchi22.github.io/ChordGPT/)
+
+Please note that the demo version is intended for demonstration purposes only and may be stopped without notice.
+
+
