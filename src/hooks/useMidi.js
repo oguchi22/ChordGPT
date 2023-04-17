@@ -27,9 +27,15 @@ const useMidi = (chordProgression, tempo) => {
 
   // Function to convert chord names to pitch names
   const chordToPitch = (chordName) => {
-    console.log(chordName);
-    const chord = teoria.chord(chordName);
-    return chord.notes().map((note) => note.toString());
+    try {
+      const chord = teoria.chord(chordName);
+      return chord.notes().map((note) => note.toString());
+    } catch (error) {
+      console.error(
+        `Error converting chord "${chordName}" to pitch names: ${error}`
+      );
+      return []; // Return an empty array if the chord name is not supported
+    }
   };
 
   useEffect(() => {
