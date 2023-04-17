@@ -3,8 +3,9 @@ import React from "react";
 import { FaDice } from "react-icons/fa";
 
 const keys = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-const minorKeys = keys.map((key) => `${key}m`);
-const allKeys = keys.concat(minorKeys);
+const majorKeys = keys.map((key) => `${key} Major`);
+const minorKeys = keys.map((key) => `${key} Minor`);
+const allKeys = majorKeys.concat(minorKeys);
 
 const promptSuggestions = [
   "Dreamy and uplifting for a rainy day",
