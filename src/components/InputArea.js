@@ -7,6 +7,23 @@ const majorKeys = keys.map((key) => `${key} Major`);
 const minorKeys = keys.map((key) => `${key} Minor`);
 const allKeys = majorKeys.concat(minorKeys);
 
+const firstChords = [
+  "Random Diatonic",
+  "Random All",
+  "I",
+  "bII",
+  "II",
+  "bIII",
+  "III",
+  "IV",
+  "#IV",
+  "V",
+  "bVI",
+  "VI",
+  "bVII",
+  "VII",
+];
+
 const promptSuggestions = [
   "Dreamy and uplifting for a rainy day",
   "Mysterious and haunting for a suspenseful story",
@@ -127,6 +144,33 @@ const InputArea = ({
             disabled={isPlaying | isLoading}
           />
         </div>
+        <div className="control-group">
+          <label
+            className="input-label"
+            htmlFor="number-of-bars"
+            style={{
+              opacity: isPlaying | isLoading ? 0.5 : 1,
+              cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
+            }}
+          >
+            Length: {songParameters.number_of_bars}
+          </label>
+          <input
+            className="slider-input"
+            id="number-of-bars"
+            type="range"
+            min="4"
+            max="32"
+            step="4"
+            value={songParameters.number_of_bars}
+            onChange={(e) => handleInputChange(e, "number_of_bars")}
+            style={{
+              opacity: isPlaying | isLoading ? 0.5 : 1,
+              cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
+            }}
+            disabled={isPlaying | isLoading}
+          />
+        </div>
       </div>
       <div className="input-row">
         <div className="control-group">
@@ -161,29 +205,31 @@ const InputArea = ({
         <div className="control-group">
           <label
             className="input-label"
-            htmlFor="number-of-bars"
+            htmlFor="firstChord"
             style={{
               opacity: isPlaying | isLoading ? 0.5 : 1,
               cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
             }}
           >
-            Number of bars
+            Starting Chord
           </label>
-          <input
-            className="text-input"
-            id="number-of-bars"
-            type="number"
-            min="4"
-            max="32"
-            value={songParameters.number_of_bars}
-            onChange={(e) => handleInputChange(e, "number_of_bars")}
+          <select
+            className="dropdown-input"
+            id="firstChord"
+            value={songParameters.firstChord}
+            onChange={(e) => handleInputChange(e, "firstChord")}
             style={{
               opacity: isPlaying | isLoading ? 0.5 : 1,
-              cursor: isPlaying | isLoading ? "not-allowed" : "text",
+              cursor: isPlaying | isLoading ? "not-allowed" : "auto",
             }}
-            readOnly={isPlaying | isLoading}
             disabled={isPlaying | isLoading}
-          />
+          >
+            {firstChords.map((chord, index) => (
+              <option key={index} value={chord}>
+                {chord}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
       <button

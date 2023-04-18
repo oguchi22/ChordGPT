@@ -3,8 +3,6 @@ const { PromptTemplate } = require("langchain");
 const { LLMChain } = require("langchain/chains");
 const { ChatOpenAI } = require("langchain/chat_models/openai");
 
-const debug_first_chord = "I";
-
 const complexityDefinitions = [
   "At this level, the chord progressions are simple, mostly consisting of triads, primarily using the I, IV, and V chords in the given key. These progressions are suitable for beginners and are commonly found in popular and folk music.",
   "Chord progressions at this level include basic diatonic chords from the given key, such as ii and vi, in addition to the I, IV, and V chords. These progressions may also feature simple chord extensions like sus2 and sus4 chords, providing more variety while maintaining a relatively simple structure.",
@@ -72,6 +70,7 @@ exports.handler = async (event) => {
     const key = body.key;
     const tempo = body.tempo;
     const number_of_bars = body.number_of_bars;
+    const firstChord = body.firstChord;
     const userPrompt = body.userPrompt;
 
     const intermediateLLM = new ChatOpenAI({
@@ -102,7 +101,7 @@ exports.handler = async (event) => {
       complexity_definition: complexityDefinitions[complexity - 1],
       key: key,
       tempo: tempo,
-      first_chord: debug_first_chord,
+      first_chord: firstChord,
     });
 
     const finalPromptText = intermediatePrompt.text.includes("Final prompt:")
@@ -121,7 +120,7 @@ exports.handler = async (event) => {
       key: key,
       tempo: tempo,
       number_of_bars: number_of_bars,
-      first_chord: debug_first_chord,
+      first_chord: firstChord,
     });
 
     if (response) {
