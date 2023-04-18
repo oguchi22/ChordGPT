@@ -38,6 +38,43 @@ const useMidi = (chordProgression, tempo) => {
     }
   };
 
+  const getDurations = (length) => {
+    switch (length) {
+      case 1:
+        return [1];
+      case 2:
+        return [2, 2];
+      case 3:
+        return [4, 4, 2];
+      case 4:
+        return [4, 4, 4, 4];
+      case 5:
+        return [8, 8, 8, 8, 2];
+      case 6:
+        return [8, 8, 8, 8, 4, 4];
+      case 7:
+        return [8, 8, 8, 8, 8, 8, 4];
+      case 8:
+        return [8, 8, 8, 8, 8, 8, 8, 8];
+      case 9:
+        return [16, 16, 16, 16, 16, 16, 16, 16, 2];
+      case 10:
+        return [16, 16, 16, 16, 16, 16, 16, 16, 4, 4];
+      case 11:
+        return [16, 16, 16, 16, 16, 16, 16, 16, 8, 8, 4];
+      case 12:
+        return [16, 16, 16, 16, 16, 16, 16, 16, 8, 8, 8, 8];
+      case 13:
+        return [16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 4];
+      case 14:
+        return [16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 8, 8];
+      case 15:
+        return [16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 8];
+      default:
+        return Array(length).fill(16);
+    }
+  };
+
   useEffect(() => {
     const handleAltChords = (chord) => {
       if (chord.includes("alt")) {
@@ -81,12 +118,13 @@ const useMidi = (chordProgression, tempo) => {
           .split(" ")
           .filter((chord) => chord.trim() !== "" && chord.trim() !== "|")
           .map(handleAltChords); // Add this line to handle 'alt' chords
-        const durationPerChord = 1 * chords.length;
-        chords.forEach((chord) => {
+        const durations = getDurations(chords.length);
+        chords.forEach((chord, index) => {
           const pitches = chordToPitch(chord);
+          if (pitches.length === 0) return;
           const note = new MidiWriter.NoteEvent({
             pitch: pitches,
-            duration: durationPerChord.toString(),
+            duration: durations[index].toString(),
           });
           track.addEvent(note);
         });
