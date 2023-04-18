@@ -75,6 +75,7 @@ const useChatGPT = () => {
     key: "C",
     tempo: 120,
     number_of_bars: 8,
+    firstChord: "Random Diatonic",
   });
   const [userPrompt, setUserPrompt] = useState("");
   const [chordProgression, setChordProgression] = useState("");
@@ -82,6 +83,32 @@ const useChatGPT = () => {
   const generateChordProgression = useCallback(async () => {
     setIsLoading(true);
     setError(null);
+
+    let firstChord = songParameters.firstChord;
+    if (songParameters.firstChord === "Random Diatonic") {
+      const diatonicChords = songParameters.key.includes("Major")
+        ? ["I", "II", "III", "IV", "V", "VI"]
+        : ["I", "II", "bIII", "IV", "V", "bVI", "bVII"];
+      firstChord =
+        diatonicChords[Math.floor(Math.random() * diatonicChords.length)];
+    } else if (songParameters.firstChord === "Random All") {
+      const allChords = [
+        "I",
+        "bII",
+        "II",
+        "bIII",
+        "III",
+        "IV",
+        "#IV",
+        "V",
+        "bVI",
+        "VI",
+        "bVII",
+        "VII",
+      ];
+      firstChord = allChords[Math.floor(Math.random() * allChords.length)];
+    }
+
     try {
       const intermediateLLM = new ChatOpenAI({
         temperature: 0,
@@ -112,7 +139,7 @@ const useChatGPT = () => {
           complexityDefinitions[songParameters.complexity - 1],
         key: songParameters.key,
         tempo: songParameters.tempo,
-        first_chord: debug_first_chord,
+        first_chord: firstChord,
       });
 
       const finalPromptText = intermediatePrompt.text.includes("Final prompt:")
@@ -135,7 +162,7 @@ const useChatGPT = () => {
         key: songParameters.key,
         tempo: songParameters.tempo,
         number_of_bars: songParameters.number_of_bars,
-        first_chord: debug_first_chord,
+        first_chord: firstChord,
       });
 
       if (response) {
