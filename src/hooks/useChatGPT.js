@@ -50,7 +50,7 @@ const useChatGPT = () => {
         key: songParameters.key,
         tempo: songParameters.tempo,
         number_of_bars: songParameters.number_of_bars,
-        first_chord: firstChord,
+        firstChord,
         userPrompt,
       });
       if (response.data && response.data.chordProgression) {
