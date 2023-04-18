@@ -45,7 +45,7 @@ const OutputArea = ({
         <button className="control-button" onClick={downloadMidi}>
           <FaDownload />
         </button>
-        <div className="instrument-select-container">
+        {/* <div className="instrument-select-container">
           <FaMusic />
           <select
             className="instrument-select"
@@ -53,7 +53,7 @@ const OutputArea = ({
           >
             <option value="piano">Piano</option>
           </select>
-        </div>
+        </div> */}
       </div>
     </div>
   );

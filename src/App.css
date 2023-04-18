@@ -37,7 +37,7 @@
 
 .controls {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 }
 
@@ -50,7 +50,7 @@
   text-decoration: none;
   display: inline-block;
   font-size: 1rem;
-  margin: 0.5rem 0;
+  margin: 0.5rem 1rem;
   cursor: pointer;
   border-radius: 5px;
   transition: background-color 0.3s;
@@ -115,10 +115,10 @@
 .control-group {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
   flex-grow: 1;
-  margin: 0 10px;
-  width: 48%;
+  margin: 0 0px;
+  width: 100%;
 }
 .slider-input {
   -webkit-appearance: none;
@@ -202,7 +202,7 @@
   font-size: 28px;
   padding: 15px;
   padding-right: 50px; /* Add extra padding to the right to make room for the dice icon */
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   width: calc(100% - 2px); /* Adjust the width to account for border */
   box-sizing: border-box; /* Add box-sizing to include padding and border in the width */
 }
@@ -210,7 +210,7 @@
 .dice-icon {
   position: absolute;
   right: 20px;
-  top: calc(50% - 30px); /* Updated to use calc() */
+  top: calc(50% - 22px); /* Updated to use calc() */
   font-size: 40px;
   color: rgba(255, 255, 255, 0.8);
   cursor: pointer;
@@ -235,4 +235,32 @@
   border-radius: 5px;
   /* cursor: not-allowed; */
   z-index: 1;
+}
+
+.input-grid {
+  display: grid;
+  /* grid-template-columns: repeat(2, 1); */
+  /* grid-template-rows: repeat(1, 1fr); */
+  gap: 15px;
+  width: 90%;
+  margin: 15px;
+}
+
+.show-settings-btn {
+  background-color: #2c2c2c;
+  border: none;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1rem;
+  margin: 0.5rem 0;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.show-settings-btn:hover {
+  background-color: #4b5056;
 }
