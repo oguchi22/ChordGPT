@@ -4,8 +4,6 @@ import { PromptTemplate } from "langchain";
 import { LLMChain } from "langchain/chains";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 
-const debug_first_chord = "I";
-
 const complexityDefinitions = [
   "At this level, the chord progressions are simple, mostly consisting of triads, primarily using the I, IV, and V chords in the given key. These progressions are suitable for beginners and are commonly found in popular and folk music.",
   "Chord progressions at this level include basic diatonic chords from the given key, such as ii and vi, in addition to the I, IV, and V chords. These progressions may also feature simple chord extensions like sus2 and sus4 chords, providing more variety while maintaining a relatively simple structure.",
@@ -72,7 +70,7 @@ const useChatGPT = () => {
   const [error, setError] = useState(null);
   const [songParameters, setSongParameters] = useState({
     complexity: 3,
-    key: "C",
+    key: "C Major",
     tempo: 120,
     number_of_bars: 8,
     firstChord: "Random Diatonic",
