@@ -7,7 +7,7 @@ const useChatGPT = () => {
   const [error, setError] = useState(null);
   const [songParameters, setSongParameters] = useState({
     complexity: 3,
-    key: "C",
+    key: "C Major",
     tempo: 120,
     number_of_bars: 8,
     firstChord: "Random Diatonic",
