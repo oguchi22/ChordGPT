@@ -238,7 +238,7 @@ const InputArea = ({
             id="number-of-bars"
             type="range"
             min="4"
-            max="32"
+            max="16"
             step="4"
             value={songParameters.number_of_bars}
             onChange={(e) => handleInputChange(e, "number_of_bars")}
