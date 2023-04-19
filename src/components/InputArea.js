@@ -1,5 +1,5 @@
 // src/components/InputArea.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaDice, FaChevronUp, FaChevronDown } from "react-icons/fa";
 
 const keys = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
@@ -24,18 +24,54 @@ const firstChords = [
   "VII",
 ];
 
-const promptSuggestions = [
-  "Dreamy and uplifting for a rainy day",
-  "Mysterious and haunting for a suspenseful story",
-  "Groovy and energetic for a dance party",
-  "Nostalgic and emotional for reminiscing",
-  "Soothing and calming for a meditation session",
-  "Quirky and playful for a children's show theme",
-  "Powerful and dramatic for a heroic adventure",
-  "Warm and inviting for a cozy evening",
-  "Futuristic and innovativen for a sci-fi setting",
-  "Exotic and mesmerizing for a world music fusion",
-];
+const translations = {
+  en: {
+    placeholder: "Craft Your Unique Chord Progression",
+    showAdvanced: "Show Advanced Settings",
+    hideAdvanced: "Hide Advanced Settings",
+    complexity: "Complexity",
+    tempo: "Tempo",
+    progressionLength: "Progression Length",
+    key: "Key",
+    startingChord: "Starting Chord",
+    generateChords: "Generate Chords",
+    promptSuggestions: [
+      "Dreamy and uplifting for a rainy day",
+      "Mysterious and haunting for a suspenseful story",
+      "Groovy and energetic for a dance party",
+      "Nostalgic and emotional for reminiscing",
+      "Soothing and calming for a meditation session",
+      "Quirky and playful for a children's show theme",
+      "Powerful and dramatic for a heroic adventure",
+      "Warm and inviting for a cozy evening",
+      "Futuristic and innovative for a sci-fi setting",
+      "Exotic and mesmerizing for a world music fusion",
+    ],
+  },
+  ja: {
+    placeholder: "ユニークなコード進行を作成する",
+    showAdvanced: "詳細設定を表示",
+    hideAdvanced: "詳細設定を非表示",
+    complexity: "複雑さ",
+    tempo: "テンポ",
+    progressionLength: "進行の長さ",
+    key: "キー",
+    startingChord: "開始コード",
+    generateChords: "コード進行を生成",
+    promptSuggestions: [
+      "雨の日の夢見心地で上昇気分",
+      "サスペンス映画にふさわしい神秘的で幽霊のような",
+      "ダンスパーティーに適したグルーヴィでエネルギッシュ",
+      "懐かしくて感動的な思い出話",
+      "瞑想セッションに心地よくリラックス",
+      "子供番組のテーマにふさわしい奇抜で遊び心がある",
+      "勇敢な冒険に力強くドラマチック",
+      "暖かく居心地の良い夕暮れ時",
+      "未来的で革新的なSFの設定",
+      "エキゾチックで魅惑的な世界音楽フュージョン",
+    ],
+  },
+};
 
 const InputArea = ({
   songParameters,
@@ -46,6 +82,13 @@ const InputArea = ({
   isPlaying,
   isLoading,
 }) => {
+  const [language, setLanguage] = useState("en");
+
+  useEffect(() => {
+    const userLanguage = navigator.language.startsWith("ja") ? "ja" : "en";
+    setLanguage(userLanguage);
+  }, []);
+
   const [showAdvanced, setShowAdvanced] = useState(false);
 
   const toggleAdvancedSettings = () => {
@@ -68,8 +111,10 @@ const InputArea = ({
   };
 
   const handleDiceClick = () => {
-    const randomIndex = Math.floor(Math.random() * promptSuggestions.length);
-    setUserPrompt(promptSuggestions[randomIndex]);
+    const randomIndex = Math.floor(
+      Math.random() * translations[language].promptSuggestions.length
+    );
+    setUserPrompt(translations[language].promptSuggestions[randomIndex]);
   };
 
   return (
@@ -81,7 +126,7 @@ const InputArea = ({
           type="text"
           value={userPrompt}
           onChange={handleUserPromptChange}
-          placeholder="Craft Your Unique Chord Progression"
+          placeholder={translations[language].placeholder}
           style={{
             opacity: isPlaying | isLoading ? 0.5 : 1,
             cursor: isPlaying | isLoading ? "not-allowed" : "text",
@@ -106,7 +151,9 @@ const InputArea = ({
         }}
         disabled={isPlaying | isLoading}
         title={
-          showAdvanced ? "Hide Advanced Settings" : "Show Advanced Settings"
+          showAdvanced
+            ? translations[language].hideAdvanced
+            : translations[language].showAdvanced
         }
       >
         {showAdvanced ? <FaChevronUp /> : <FaChevronDown />}
@@ -122,7 +169,7 @@ const InputArea = ({
                 cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
               }}
             >
-              Complexity: {songParameters.complexity}
+              {translations[language].complexity}: {songParameters.complexity}
             </label>
             <input
               className="slider-input"
@@ -148,7 +195,7 @@ const InputArea = ({
                 cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
               }}
             >
-              Tempo: {songParameters.tempo} BPM
+              {translations[language].tempo}: {songParameters.tempo} BPM
             </label>
             <input
               className="slider-input"
@@ -174,7 +221,8 @@ const InputArea = ({
                 cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
               }}
             >
-              Progression Length: {songParameters.number_of_bars}
+              {translations[language].progressionLength}:{" "}
+              {songParameters.number_of_bars}
             </label>
             <input
               className="slider-input"
@@ -201,7 +249,7 @@ const InputArea = ({
                 cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
               }}
             >
-              Key
+              {translations[language].key}
             </label>
             <select
               className="dropdown-input"
@@ -230,7 +278,7 @@ const InputArea = ({
                 cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
               }}
             >
-              Starting Chord
+              {translations[language].startingChord}
             </label>
             <select
               className="dropdown-input"
@@ -261,7 +309,7 @@ const InputArea = ({
         }}
         disabled={isPlaying | isLoading}
       >
-        Generate Chords
+        {translations[language].generateChords}
       </button>
     </div>
   );
