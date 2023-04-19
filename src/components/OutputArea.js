@@ -39,10 +39,26 @@ const OutputArea = ({
         <div className="chord-progression">{renderChords()}</div>
       </div>
       <div className="controls">
-        <button className="control-button" onClick={playMidi}>
+        <button
+          className="control-button"
+          onClick={playMidi}
+          style={{
+            opacity: isLoading ? 0.2 : 0.5,
+            cursor: isLoading ? "not-allowed" : "pointer",
+          }}
+          disabled={isLoading}
+        >
           {isPlaying ? <FaStop /> : <FaPlay />}
         </button>
-        <button className="control-button" onClick={downloadMidi}>
+        <button
+          className="control-button"
+          onClick={downloadMidi}
+          style={{
+            opacity: isLoading ? 0.2 : 0.5,
+            cursor: isLoading ? "not-allowed" : "pointer",
+          }}
+          disabled={isLoading}
+        >
           <FaDownload />
         </button>
         {/* <div className="instrument-select-container">
