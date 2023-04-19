@@ -158,148 +158,147 @@ const InputArea = ({
       >
         {showAdvanced ? <FaChevronUp /> : <FaChevronDown />}
       </button>
-      {showAdvanced && (
-        <div className="input-grid">
-          <div className="control-group">
-            <label
-              className="input-label"
-              htmlFor="complexity"
-              style={{
-                opacity: isPlaying | isLoading ? 0.5 : 1,
-                cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
-              }}
-            >
-              {translations[language].complexity}: {songParameters.complexity}
-            </label>
-            <input
-              className="slider-input"
-              id="complexity"
-              type="range"
-              min="1"
-              max="5"
-              value={songParameters.complexity}
-              onChange={(e) => handleInputChange(e, "complexity")}
-              style={{
-                opacity: isPlaying | isLoading ? 0.5 : 1,
-                cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
-              }}
-              disabled={isPlaying | isLoading}
-            />
-          </div>
-          <div className="control-group">
-            <label
-              className="input-label"
-              htmlFor="tempo"
-              style={{
-                opacity: isPlaying | isLoading ? 0.5 : 1,
-                cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
-              }}
-            >
-              {translations[language].tempo}: {songParameters.tempo} BPM
-            </label>
-            <input
-              className="slider-input"
-              id="tempo"
-              type="range"
-              min="40"
-              max="240"
-              value={songParameters.tempo}
-              onChange={(e) => handleInputChange(e, "tempo")}
-              style={{
-                opacity: isPlaying | isLoading ? 0.5 : 1,
-                cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
-              }}
-              disabled={isPlaying | isLoading}
-            />
-          </div>
-          <div className="control-group">
-            <label
-              className="input-label"
-              htmlFor="number-of-bars"
-              style={{
-                opacity: isPlaying | isLoading ? 0.5 : 1,
-                cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
-              }}
-            >
-              {translations[language].progressionLength}:{" "}
-              {songParameters.number_of_bars}
-            </label>
-            <input
-              className="slider-input"
-              id="number-of-bars"
-              type="range"
-              min="4"
-              max="32"
-              step="4"
-              value={songParameters.number_of_bars}
-              onChange={(e) => handleInputChange(e, "number_of_bars")}
-              style={{
-                opacity: isPlaying | isLoading ? 0.5 : 1,
-                cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
-              }}
-              disabled={isPlaying | isLoading}
-            />
-          </div>
-          <div className="control-group">
-            <label
-              className="input-label"
-              htmlFor="key"
-              style={{
-                opacity: isPlaying | isLoading ? 0.5 : 1,
-                cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
-              }}
-            >
-              {translations[language].key}
-            </label>
-            <select
-              className="dropdown-input"
-              id="key"
-              value={songParameters.key}
-              onChange={(e) => handleInputChange(e, "key")}
-              style={{
-                opacity: isPlaying | isLoading ? 0.5 : 1,
-                cursor: isPlaying | isLoading ? "not-allowed" : "auto",
-              }}
-              disabled={isPlaying | isLoading}
-            >
-              {allKeys.map((key, index) => (
-                <option key={index} value={key}>
-                  {key}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="control-group">
-            <label
-              className="input-label"
-              htmlFor="firstChord"
-              style={{
-                opacity: isPlaying | isLoading ? 0.5 : 1,
-                cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
-              }}
-            >
-              {translations[language].startingChord}
-            </label>
-            <select
-              className="dropdown-input"
-              id="firstChord"
-              value={songParameters.firstChord}
-              onChange={(e) => handleInputChange(e, "firstChord")}
-              style={{
-                opacity: isPlaying | isLoading ? 0.5 : 1,
-                cursor: isPlaying | isLoading ? "not-allowed" : "auto",
-              }}
-              disabled={isPlaying | isLoading}
-            >
-              {firstChords.map((chord, index) => (
-                <option key={index} value={chord}>
-                  {chord}
-                </option>
-              ))}
-            </select>
-          </div>
+      <div className={`input-grid${showAdvanced ? " input-grid-open" : ""}`}>
+        <div className="control-group">
+          <label
+            className="input-label"
+            htmlFor="complexity"
+            style={{
+              opacity: isPlaying | isLoading ? 0.5 : 1,
+              cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
+            }}
+          >
+            {translations[language].complexity}: {songParameters.complexity}
+          </label>
+          <input
+            className="slider-input"
+            id="complexity"
+            type="range"
+            min="1"
+            max="5"
+            value={songParameters.complexity}
+            onChange={(e) => handleInputChange(e, "complexity")}
+            style={{
+              opacity: isPlaying | isLoading ? 0.5 : 1,
+              cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
+            }}
+            disabled={isPlaying | isLoading}
+          />
         </div>
-      )}
+        <div className="control-group">
+          <label
+            className="input-label"
+            htmlFor="tempo"
+            style={{
+              opacity: isPlaying | isLoading ? 0.5 : 1,
+              cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
+            }}
+          >
+            {translations[language].tempo}: {songParameters.tempo} BPM
+          </label>
+          <input
+            className="slider-input"
+            id="tempo"
+            type="range"
+            min="40"
+            max="240"
+            value={songParameters.tempo}
+            onChange={(e) => handleInputChange(e, "tempo")}
+            style={{
+              opacity: isPlaying | isLoading ? 0.5 : 1,
+              cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
+            }}
+            disabled={isPlaying | isLoading}
+          />
+        </div>
+        <div className="control-group">
+          <label
+            className="input-label"
+            htmlFor="number-of-bars"
+            style={{
+              opacity: isPlaying | isLoading ? 0.5 : 1,
+              cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
+            }}
+          >
+            {translations[language].progressionLength}:{" "}
+            {songParameters.number_of_bars}
+          </label>
+          <input
+            className="slider-input"
+            id="number-of-bars"
+            type="range"
+            min="4"
+            max="32"
+            step="4"
+            value={songParameters.number_of_bars}
+            onChange={(e) => handleInputChange(e, "number_of_bars")}
+            style={{
+              opacity: isPlaying | isLoading ? 0.5 : 1,
+              cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
+            }}
+            disabled={isPlaying | isLoading}
+          />
+        </div>
+        <div className="control-group">
+          <label
+            className="input-label"
+            htmlFor="key"
+            style={{
+              opacity: isPlaying | isLoading ? 0.5 : 1,
+              cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
+            }}
+          >
+            {translations[language].key}
+          </label>
+          <select
+            className="dropdown-input"
+            id="key"
+            value={songParameters.key}
+            onChange={(e) => handleInputChange(e, "key")}
+            style={{
+              opacity: isPlaying | isLoading ? 0.5 : 1,
+              cursor: isPlaying | isLoading ? "not-allowed" : "auto",
+            }}
+            disabled={isPlaying | isLoading}
+          >
+            {allKeys.map((key, index) => (
+              <option key={index} value={key}>
+                {key}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="control-group">
+          <label
+            className="input-label"
+            htmlFor="firstChord"
+            style={{
+              opacity: isPlaying | isLoading ? 0.5 : 1,
+              cursor: isPlaying | isLoading ? "not-allowed" : "pointer",
+            }}
+          >
+            {translations[language].startingChord}
+          </label>
+          <select
+            className="dropdown-input"
+            id="firstChord"
+            value={songParameters.firstChord}
+            onChange={(e) => handleInputChange(e, "firstChord")}
+            style={{
+              opacity: isPlaying | isLoading ? 0.5 : 1,
+              cursor: isPlaying | isLoading ? "not-allowed" : "auto",
+            }}
+            disabled={isPlaying | isLoading}
+          >
+            {firstChords.map((chord, index) => (
+              <option key={index} value={chord}>
+                {chord}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
       <button
         className="generate-btn"
         onClick={handleButtonClick}
