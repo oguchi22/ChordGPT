@@ -73,6 +73,14 @@ exports.handler = async (event) => {
     const firstChord = body.firstChord;
     const userPrompt = body.userPrompt;
 
+    // Log user input and other information
+    console.log("User Input:", userPrompt);
+    console.log("Complexity:", complexity);
+    console.log("Key:", key);
+    console.log("Tempo:", tempo);
+    console.log("Number of Bars:", number_of_bars);
+    console.log("First Chord:", firstChord);
+
     const intermediateLLM = new ChatOpenAI({
       temperature: 0,
       openAIApiKey: process.env.OPENAI_API_KEY,
@@ -104,6 +112,8 @@ exports.handler = async (event) => {
       first_chord: firstChord,
     });
 
+    console.log("Intermediate Propmt:", intermediatePrompt.text);
+
     const finalPromptText = intermediatePrompt.text.includes("Final prompt:")
       ? intermediatePrompt.text
           .slice(
@@ -124,6 +134,7 @@ exports.handler = async (event) => {
     });
 
     if (response) {
+      console.log("Result:", response.text);
       return {
         statusCode: 200,
         headers: {
