@@ -1,6 +1,6 @@
 // src/hooks/useChatGPT.js
 import { useState, useCallback } from "react";
-import { PromptTemplate } from "langchain";
+import { PromptTemplate } from "langchain/prompts";
 import { LLMChain } from "langchain/chains";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 
