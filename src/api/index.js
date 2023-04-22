@@ -1,7 +1,8 @@
 // lambdaFunction.js
-const { PromptTemplate } = require("langchain");
+const { PromptTemplate } = require("langchain/prompts");
 const { LLMChain } = require("langchain/chains");
 const { ChatOpenAI } = require("langchain/chat_models/openai");
+const teoria = require("teoria");
 
 const complexityDefinitions = [
   "At this level, the chord progressions are simple, mostly consisting of triads, primarily using the I, IV, and V chords in the given key. These progressions are suitable for beginners and are commonly found in popular and folk music.",
@@ -62,6 +63,103 @@ const finalPromptTemplate = PromptTemplate.fromTemplate(
     Carefully create a chord progression that matches these parameters, using proper and standard chord notation for specific chord names instead of chord degrees or roman numerals (e.g., 'IVmaj7'). Ensure that the chord names are notated correctly and consistently (for example, use 'Amaj7' instead of 'A Major 7'). Present the chord progression in the format 'Bar 1: Chord1 | Bar 2: Chord2 | ... | Bar N: ChordN'."
     `
 );
+
+const getRomanToNoteMapping = (key) => {
+  const romanNumerals = [
+    "I",
+    "bII",
+    "II",
+    "bIII",
+    "III",
+    "IV",
+    "#IV",
+    "V",
+    "bVI",
+    "VI",
+    "bVII",
+    "VII",
+  ];
+
+  const interval = [
+    "P1",
+    "m2",
+    "M2",
+    "m3",
+    "M3",
+    "P4",
+    "d5",
+    "P5",
+    "m6",
+    "M6",
+    "m7",
+    "M7",
+  ];
+
+  const rootNote = teoria.note(key.split(" ")[0]);
+
+  return romanNumerals.reduce((acc, roman, index) => {
+    try {
+      const note = teoria.chord(rootNote.interval(interval[index])).toString();
+      acc[roman] = note;
+      acc[roman.toLowerCase()] = note;
+    } catch (error) {
+      // Ignore invalid chords for the given key
+    }
+    return acc;
+  }, {});
+};
+
+const replaceRomanNumeralsWithChords = (chordString, key) => {
+  const romanToChordMapping = getRomanToNoteMapping(key);
+
+  const replaceChordName = (match, p1, p2, p3) => {
+    const root = romanToChordMapping[p1] || p1;
+    return `${root}${p2 || ""}${p3 || ""}`;
+  };
+
+  return chordString.replace(
+    /([b#]?[IiVv]+(?!m|dim|min))([^/\s]*?)(\/[b#]?[A-G])?/g,
+    replaceChordName
+  );
+};
+
+const formatChordProgression = (rawChordProgression, numberOfBars, key) => {
+  const chords = rawChordProgression
+    .split(/\n|\|/)
+    .map((chord) => chord.trim());
+
+  const formattedProgression = chords
+    .map((chord, index) => {
+      const barNumber = index + 1;
+      if (barNumber > numberOfBars) {
+        return null;
+      }
+      const chordName = chord.startsWith(`Bar`)
+        ? chord.split(": ")[1].replace(/-/g, " ")
+        : chord.replace(/-/g, " ");
+
+      const correctedChordName = replaceRomanNumeralsWithChords(
+        chordName
+          .replace(/ Major/g, "")
+          .replace(/ Minor/g, "m")
+          .replace(/maj(?!\d+)/g, "")
+          .replace(/min(?!\d+)/g, "m")
+          .replace(/min7(?!\d+)/g, "m7"),
+        key
+      );
+
+      const formattedChord = `Bar ${barNumber}: ${correctedChordName}`;
+
+      // Add a line break every 4 bars, except for the first bar
+      return barNumber % 4 === 1 && barNumber !== 1
+        ? `\n${formattedChord}`
+        : formattedChord;
+    })
+    .filter((chord) => chord !== null)
+    .join(" | ");
+
+  return formattedProgression;
+};
 
 exports.handler = async (event) => {
   try {
@@ -134,7 +232,13 @@ exports.handler = async (event) => {
     });
 
     if (response) {
-      console.log("Result:", response.text);
+      console.log("Response:", response.text);
+      const formattedProgression = formatChordProgression(
+        response.text,
+        number_of_bars,
+        key
+      );
+      console.log("Result:", formattedProgression);
       return {
         statusCode: 200,
         headers: {
@@ -142,7 +246,7 @@ exports.handler = async (event) => {
           "Access-Control-Allow-Credentials": true,
           "Access-Control-Allow-Methods": "OPTIONS,POST",
         },
-        body: JSON.stringify({ chordProgression: response.text }),
+        body: JSON.stringify({ chordProgression: formattedProgression }),
       };
     }
   } catch (err) {
