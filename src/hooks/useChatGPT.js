@@ -65,6 +65,32 @@ const finalPromptTemplate = PromptTemplate.fromTemplate(
     `
 );
 
+const formatChordProgression = (rawChordProgression, numberOfBars) => {
+  const chords = rawChordProgression
+    .split(/\n|\|/)
+    .map((chord) => chord.trim());
+
+  const formattedProgression = chords
+    .map((chord, index) => {
+      const barNumber = index + 1;
+      if (barNumber > numberOfBars) {
+        return null;
+      }
+      const formattedChord = chord.startsWith(`Bar`)
+        ? `Bar ${barNumber}: ${chord.split(": ")[1]}`
+        : `Bar ${barNumber}: ${chord}`;
+
+      // Add a line break every 4 bars, except for the first bar
+      return barNumber % 4 === 1 && barNumber !== 1
+        ? `\n${formattedChord}`
+        : formattedChord;
+    })
+    .filter((chord) => chord !== null)
+    .join(" | ");
+
+  return formattedProgression;
+};
+
 const useChatGPT = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -165,7 +191,11 @@ const useChatGPT = () => {
 
       if (response) {
         console.log(response.text);
-        setChordProgression(response.text);
+        const formattedProgression = formatChordProgression(
+          response.text,
+          songParameters.number_of_bars
+        );
+        setChordProgression(formattedProgression);
       }
     } catch (err) {
       console.error(err);
