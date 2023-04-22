@@ -3,6 +3,7 @@ import { useState, useCallback } from "react";
 import { PromptTemplate } from "langchain/prompts";
 import { LLMChain } from "langchain/chains";
 import { ChatOpenAI } from "langchain/chat_models/openai";
+import teoria from "teoria";
 
 const complexityDefinitions = [
   "At this level, the chord progressions are simple, mostly consisting of triads, primarily using the I, IV, and V chords in the given key. These progressions are suitable for beginners and are commonly found in popular and folk music.",
@@ -65,7 +66,66 @@ const finalPromptTemplate = PromptTemplate.fromTemplate(
     `
 );
 
-const formatChordProgression = (rawChordProgression, numberOfBars) => {
+const getRomanToNoteMapping = (key) => {
+  const romanNumerals = [
+    "I",
+    "bII",
+    "II",
+    "bIII",
+    "III",
+    "IV",
+    "#IV",
+    "V",
+    "bVI",
+    "VI",
+    "bVII",
+    "VII",
+  ];
+
+  const interval = [
+    "P1",
+    "m2",
+    "M2",
+    "m3",
+    "M3",
+    "P4",
+    "d5",
+    "P5",
+    "m6",
+    "M6",
+    "m7",
+    "M7",
+  ];
+
+  const rootNote = teoria.note(key.split(" ")[0]);
+
+  return romanNumerals.reduce((acc, roman, index) => {
+    try {
+      const note = teoria.chord(rootNote.interval(interval[index])).toString();
+      acc[roman] = note;
+      acc[roman.toLowerCase()] = note;
+    } catch (error) {
+      // Ignore invalid chords for the given key
+    }
+    return acc;
+  }, {});
+};
+
+const replaceRomanNumeralsWithChords = (chordString, key) => {
+  const romanToChordMapping = getRomanToNoteMapping(key);
+
+  const replaceChordName = (match, p1, p2, p3) => {
+    const root = romanToChordMapping[p1] || p1;
+    return `${root}${p2 || ""}${p3 || ""}`;
+  };
+
+  return chordString.replace(
+    /([b#]?[IiVv]+(?!m|dim|min))([^/\s]*?)(\/[b#]?[A-G])?/g,
+    replaceChordName
+  );
+};
+
+const formatChordProgression = (rawChordProgression, numberOfBars, key) => {
   const chords = rawChordProgression
     .split(/\n|\|/)
     .map((chord) => chord.trim());
@@ -76,9 +136,21 @@ const formatChordProgression = (rawChordProgression, numberOfBars) => {
       if (barNumber > numberOfBars) {
         return null;
       }
-      const formattedChord = chord.startsWith(`Bar`)
-        ? `Bar ${barNumber}: ${chord.split(": ")[1]}`
-        : `Bar ${barNumber}: ${chord}`;
+      const chordName = chord.startsWith(`Bar`)
+        ? chord.split(": ")[1].replace(/-/g, " ")
+        : chord.replace(/-/g, " ");
+
+      const correctedChordName = replaceRomanNumeralsWithChords(
+        chordName
+          .replace(/ Major/g, "")
+          .replace(/ Minor/g, "m")
+          .replace(/maj(?!\d+)/g, "")
+          .replace(/min(?!\d+)/g, "m")
+          .replace(/min7(?!\d+)/g, "m7"),
+        key
+      );
+
+      const formattedChord = `Bar ${barNumber}: ${correctedChordName}`;
 
       // Add a line break every 4 bars, except for the first bar
       return barNumber % 4 === 1 && barNumber !== 1
@@ -193,7 +265,8 @@ const useChatGPT = () => {
         console.log(response.text);
         const formattedProgression = formatChordProgression(
           response.text,
-          songParameters.number_of_bars
+          songParameters.number_of_bars,
+          songParameters.key
         );
         setChordProgression(formattedProgression);
       }
