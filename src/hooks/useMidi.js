@@ -113,6 +113,7 @@ const useMidi = (chordProgression, tempo) => {
       const bars = lines.flatMap((line) => line.split(" | "));
       bars.forEach((bar) => {
         if (!bar) return;
+        if (!bar.includes(": ")) return;
         const chords = bar
           .split(": ")[1]
           .split(" ")
