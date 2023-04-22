@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import MidiWriter from "midi-writer-js";
 import { saveAs } from "file-saver";
 import teoria from "teoria";
-import { WebMidi } from "webmidi";
 import { Midi } from "@tonejs/midi";
 import * as Tone from "tone";
 
@@ -140,18 +139,6 @@ const useMidi = (chordProgression, tempo) => {
 
     generateMidiData();
   }, [chordProgression, selectedInstrument, tempo]);
-
-  useEffect(() => {
-    WebMidi.enable((err) => {
-      if (err) {
-        console.log("WebMidi could not be enabled.", err);
-      }
-    });
-
-    return () => {
-      WebMidi.disable();
-    };
-  }, []);
 
   useEffect(() => {
     // Set the tempo using the Transport
