@@ -128,7 +128,8 @@ const replaceRomanNumeralsWithChords = (chordString, key) => {
 const formatChordProgression = (rawChordProgression, numberOfBars, key) => {
   const chords = rawChordProgression
     .split(/\n|\|/)
-    .map((chord) => chord.trim());
+    .map((chord) => chord.trim())
+    .filter((chord) => chord !== "");
 
   const formattedProgression = chords
     .map((chord, index) => {
