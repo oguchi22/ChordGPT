@@ -145,7 +145,15 @@ const formatChordProgression = (rawChordProgression, numberOfBars, key) => {
           .replace(/ Minor/g, "m")
           .replace(/maj(?!\d+)/g, "")
           .replace(/min(?!\d+)/g, "m")
-          .replace(/min7(?!\d+)/g, "m7"),
+          .replace(/min7(?!\d+)/g, "m7")
+          .replace(/min9(?!\d+)/g, "m9")
+          .replace(/min11(?!\d+)/g, "m11")
+          .replace(/5aug(?!\d+)/g, "(#5)")
+          .replace(/7aug(?!\d+)/g, "7(#5)")
+          .replace(/5dim(?!\d+)/g, "(b5)")
+          .replace(/([A-G][#|b]*) (7)/g, "$1$2")
+          .replace(/m[^ ]?add9[^ ]?/g, "m(9)")
+          .replace("♭", "b"),
         key
       );
 
