@@ -209,8 +209,11 @@ const useMidi = (chordProgression, tempo) => {
 
     setSampler(newSampler);
 
-    const metronome = new Tone.Player().toDestination();
+    const metronome = new Tone.Player();
     metronome.buffer = metronomeBuffer;
+    const metronomeVolume = new Tone.Volume(-10); // Set the volume to -10 dB
+    metronome.connect(metronomeVolume);
+    metronomeVolume.toDestination();
 
     // Wait for the samples to load
     await Tone.loaded();
