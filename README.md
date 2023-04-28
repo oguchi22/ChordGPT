@@ -1,12 +1,12 @@
-# ChordGPT
+# ChordCrafter
 
-ChordGPT is a web application for music creators and performers that generates chord progressions based on user-defined parameters and prompts. It utilizes OpenAI's ChatGPT API to create musically interesting and harmonically rich chord progressions suitable for various complexity levels, keys, tempos, and lengths.
+ChordCrafter powered by ChatGPT API is a web application for music creators and performers that generates chord progressions based on user-defined parameters and prompts. It utilizes OpenAI's ChatGPT API to create musically interesting and harmonically rich chord progressions suitable for various complexity levels, keys, tempos, and lengths.
 
-![ChordGPT Screenshot](images/screenshot.png)
+![ChordCrafter Screenshot](images/screenshot.png)
 
 ## Installation and Usage
 
-To set up and run ChordGPT locally, follow these steps:
+To set up and run ChordCrafter locally, follow these steps:
 
 1. Clone the repository:
 
@@ -48,3 +48,11 @@ Open your web browser and navigate to http://localhost:3000 to use the applicati
 
 - Generate chord progressions based on complexity level, key, tempo, and length
 - Play and download generated chord progressions as MIDI files
+
+## Demo
+
+A live demo of ChordCrafter is available for demonstration purposes. You can try out the application and see it in action by visiting the following link:
+
+[ChordCrafter Demo](https://oguchi22.github.io/ChordGPT/)
+
+Please note that the demo version is intended for demonstration purposes only and may be stopped without notice.
