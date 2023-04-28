@@ -1,6 +1,6 @@
 {
-  "short_name": "ChordGPT",
-  "name": "AI-powered web app that generates chord progressions using ChatGPT",
+  "short_name": "ChordCrafter",
+  "name": "ChordCrafter powered by ChatGPT API",
   "icons": [
     {
       "src": "favicon.ico",

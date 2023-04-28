@@ -38,7 +38,7 @@ function App() {
     <div>
       <Global styles={globalStyles} />
       <header>
-        <h1 className="app-name">ChordGPT</h1>
+        <h1 className="app-name">ChordCrafter</h1>
       </header>
       <InputArea
         songParameters={songParameters}
