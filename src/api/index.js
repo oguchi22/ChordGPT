@@ -21,7 +21,7 @@ const intermediatePromptTemplate = PromptTemplate.fromTemplate(
   
   If the user's input is missing or irrelevant, create an intermediate prompt by deriving inspiration from the input while still adhering to the intended purpose.
   
-  Then, convert the validated input or the derived inspiration into a rich and specific final prompt for generating a chord progression by elaborating on the following elements:
+  Then, convert the validated input or the derived inspiration into a rich and specific intermediate prompt for generating a chord progression by elaborating on the following elements:
   - Mood or emotion
   - Musical genre or style
   - Reference to a well-known song
@@ -38,12 +38,10 @@ const intermediatePromptTemplate = PromptTemplate.fromTemplate(
   ## Output:
   Translated input prompt:
   Intermediate prompt:
-  Final prompt:
   - Mood or emotion:
   - Musical genre or style:
   - Reference to a well-known song:
   - Specific chord types or voicings to include or avoid:
-  - Prompt:
   `
 );
 
@@ -221,11 +219,13 @@ exports.handler = async (event) => {
 
     console.log("Intermediate Propmt:", intermediatePrompt.text);
 
-    const finalPromptText = intermediatePrompt.text.includes("Final prompt:")
+    const finalPromptText = intermediatePrompt.text.includes(
+      "Intermediate prompt:"
+    )
       ? intermediatePrompt.text
           .slice(
-            intermediatePrompt.text.indexOf("Final prompt:") +
-              "Final prompt:".length
+            intermediatePrompt.text.indexOf("Intermediate prompt:") +
+              "Intermediate prompt:".length
           )
           .trim()
       : intermediatePrompt.text;
