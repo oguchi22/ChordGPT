@@ -173,33 +173,56 @@ const fillTemplate = (template, values) =>
     name in values ? String(values[name]) : match
   );
 
-// Calls the OpenAI Chat Completions API once (no retries), aborting at the deadline.
+// Calls the OpenAI Chat Completions API, aborting at the deadline.
+// Newer models reject some parameters (e.g. a non-default temperature); if OpenAI
+// reports one of those as unsupported, it is dropped and the request is sent once more.
+const OPTIONAL_PARAMS = ["temperature"];
+
 const callChatCompletion = async (prompt, deadline) => {
-  const remaining = deadline - Date.now();
-  if (remaining <= 0) throw new Error("Deadline exceeded before OpenAI call");
+  const params = {
+    model: process.env.OPENAI_API_MODEL || "gpt-4o-mini",
+    temperature: 0,
+    // Includes reasoning tokens on reasoning models, so leave some headroom.
+    max_completion_tokens: 4000,
+    messages: [{ role: "user", content: prompt }],
+  };
 
-  const res = await fetch(OPENAI_API_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: process.env.OPENAI_API_MODEL || "gpt-4o-mini",
-      temperature: 0,
-      max_tokens: 800,
-      messages: [{ role: "user", content: prompt }],
-    }),
-    signal: AbortSignal.timeout(remaining),
-  });
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const remaining = deadline - Date.now();
+    if (remaining <= 0) throw new Error("Deadline exceeded before OpenAI call");
 
-  if (!res.ok) {
+    const res = await fetch(OPENAI_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify(params),
+      signal: AbortSignal.timeout(remaining),
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      return data.choices?.[0]?.message?.content ?? "";
+    }
+
     const body = await res.text();
-    throw new Error(`OpenAI API error ${res.status}: ${body.slice(0, 500)}`);
-  }
+    let error = {};
+    try {
+      error = JSON.parse(body).error || {};
+    } catch (e) {
+      // non-JSON error body
+    }
 
-  const data = await res.json();
-  return data.choices?.[0]?.message?.content ?? "";
+    if (res.status === 400 && attempt === 0 && OPTIONAL_PARAMS.includes(error.param)) {
+      console.warn(`Model rejected '${error.param}', retrying without it`);
+      delete params[error.param];
+      continue;
+    }
+
+    const detail = error.message || body.replace(/\s+/g, " ").slice(0, 500);
+    throw new Error(`OpenAI API error ${res.status}: ${detail}`);
+  }
 };
 
 const corsHeaders = () => ({

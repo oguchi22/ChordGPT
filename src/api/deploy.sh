@@ -32,9 +32,12 @@ aws lambda update-function-code --function-name "$FN" --zip-file fileb://index.z
   --query LastUpdateStatus --output text
 aws lambda wait function-updated --function-name "$FN"
 
+CURRENT_MODEL=$(aws lambda get-function-configuration --function-name "$FN" \
+  --query 'Environment.Variables.OPENAI_API_MODEL' --output text)
+[ "$CURRENT_MODEL" = "None" ] && CURRENT_MODEL="gpt-4o-mini"
 echo
-read -rp "OpenAI model [gpt-4o-mini]: " MODEL
-MODEL="${MODEL:-gpt-4o-mini}"
+read -rp "OpenAI model [${CURRENT_MODEL}]: " MODEL
+MODEL="${MODEL:-$CURRENT_MODEL}"
 read -rsp "New OpenAI API key (press Enter to keep the current one): " KEY
 echo
 
