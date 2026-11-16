@@ -1,54 +1,43 @@
-## Demo API Setting
+## Demo API (AWS Lambda)
 
-1. Initialize a new Node.js project by running:
+The demo site calls this Lambda function (through API Gateway), which calls the OpenAI API.
+The OpenAI API key stays on the server and is never shipped to the browser.
 
-```
-npm init -y
-```
-
-2. Install the required dependencies:
+### Build the deployment package
 
 ```
-npm install langchain openai
+cd src/api
+yarn install --production
+yarn package
 ```
 
-3. Zip the contents of this directory. Make sure to include the node_modules folder, index.js, and package.json:
+This creates `index.zip` (`index.js`, `package.json` and `node_modules`).
 
-```
-zip -r index.zip .
-```
+### Update the existing Lambda function
 
-## AWS Setting
+1. Open the function in the AWS Lambda Console.
+2. **Code** tab → **Upload from** → **.zip file** → select `index.zip` → **Save**.
+3. **Runtime settings** → **Edit**: set Runtime to **Node.js 22.x** (anything 20.x or newer works) and keep Handler as `index.handler`.
+4. **Configuration** → **General configuration**: set Timeout to **30 sec**.
+5. **Configuration** → **Environment variables**:
+   - `OPENAI_API_KEY`: your OpenAI API key
+   - `OPENAI_API_MODEL`: a current chat model (defaults to `gpt-4o-mini` if unset)
+   - `ALLOW_ORIGIN`: `https://oguchi22.github.io`
 
-Now, you're ready to create the AWS Lambda function:
+### Recommended: limit abuse
 
-1. Go to the AWS Lambda Console.
-2. Click on the "Create function" button.
-3. Select "Author from scratch".
-4. Enter a function name (e.g., "chordgptLambdaFunction").
-5. Choose "Node.js xx.x" as the runtime.
-6. Under "Function code", choose "Upload a .zip file" and select the index.zip file you created earlier.
-7. In the "Execution role" section, you can choose an existing role with basic AWS Lambda permissions or create a new role.
-8. Click on "Create function".
+The API is public, so set limits to cap costs:
 
-Once the function is created, add your OpenAI API key and model name as environment variables:
+- API Gateway → your API → **Stages** → `prod` → **Stage settings** → enable throttling (e.g. rate 1 request/sec, burst 5).
+- OpenAI dashboard → **Limits**: set a monthly budget.
 
-1. In the "Configuration" tab, click on "Environment variables".
-2. Add a new environment variable called OPENAI_API_KEY with the value set to your OpenAI API key.
-3. Add another environment variable called OPENAI_API_MODEL with the value set to the desired model name, such as "gpt-3.5-turbo".
-4. Add another environment variable called ALLOW_ORIGIN with the value set to origin of your demo site, such as "https://oguchi22.github.io".
-5. Save the environment variables.
+The function itself rejects invalid input, caps the user prompt at 500 characters,
+and aborts the OpenAI calls after 25 seconds (API Gateway times out at ~29 seconds).
 
-Finally, set up an API Gateway to trigger your Lambda function:
+### Creating it from scratch
 
-1. Go to the API Gateway Console.
-2. Click on "Create API".
-3. Choose "REST API" and click on "Build".
-4. Choose "New API", give it a name (e.g., "chordgptAPI"), and click on "Create API".
-5. In the "Actions" dropdown, choose "Create Resource". Name the resource (e.g., "generateChordProgression") and click on "Create Resource".
-6. With the new resource selected, click on the "Actions" dropdown and choose "Create Method", then select "POST".
-7. In the "Integration type" section, choose "Lambda Function".
-8. Check the "Use Lambda Proxy integration" checkbox.
-9. Select the region where your Lambda function is located and enter the Lambda function name in the "Lambda Function" field. Click on "Save".
-10. Deploy the API by clicking on the "Actions" dropdown and choosing "Deploy API". Select "New Stage", give it a name (e.g., "prod"), and click on "Deploy".
-11. You'll find the "Invoke URL" in the "Stages" section, which you can use as REACT_APP_LAMBDA_API_URL in the useChatGPT.js file.
+1. Lambda Console → **Create function** → Author from scratch, Runtime **Node.js 22.x**.
+2. Upload `index.zip` and set the timeout and environment variables as above.
+3. API Gateway → **Create API** → REST API → create a resource (e.g. `generateChordProgression`)
+   with a `POST` method using **Lambda Proxy integration**, enable CORS, and deploy to a `prod` stage.
+4. Use the stage's Invoke URL (plus the resource path) as `REACT_APP_LAMBDA_API_URL` when building the frontend.

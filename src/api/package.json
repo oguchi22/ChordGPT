@@ -1,17 +1,16 @@
 {
-  "name": "api",
-  "version": "1.0.0",
-  "description": "1. Initialize a new Node.js project by running:",
+  "name": "chordcrafter-api",
+  "version": "2.0.0",
+  "private": true,
+  "description": "AWS Lambda handler for the ChordCrafter demo",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "engines": {
+    "node": ">=20"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "scripts": {
+    "package": "rm -f index.zip && zip -qr index.zip index.js package.json node_modules"
+  },
   "dependencies": {
-    "langchain": "^0.0.57",
-    "openai": "^3.2.1",
     "teoria": "^2.5.0"
   }
 }

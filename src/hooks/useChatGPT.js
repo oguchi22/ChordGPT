@@ -1,6 +1,7 @@
 // src/hooks/useChatGPT.js
 import { useState, useCallback } from "react";
-import axios from "axios";
+
+const LAMBDA_API_URL = import.meta.env.REACT_APP_LAMBDA_API_URL;
 
 const useChatGPT = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -45,16 +46,24 @@ const useChatGPT = () => {
     }
 
     try {
-      const response = await axios.post(process.env.REACT_APP_LAMBDA_API_URL, {
-        complexity: songParameters.complexity,
-        key: songParameters.key,
-        tempo: songParameters.tempo,
-        number_of_bars: songParameters.number_of_bars,
-        firstChord,
-        userPrompt,
+      const res = await fetch(LAMBDA_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          complexity: songParameters.complexity,
+          key: songParameters.key,
+          tempo: songParameters.tempo,
+          number_of_bars: songParameters.number_of_bars,
+          firstChord,
+          userPrompt,
+        }),
       });
-      if (response.data && response.data.chordProgression) {
-        setChordProgression(response.data.chordProgression);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || `API error ${res.status}`);
+      }
+      if (data.chordProgression) {
+        setChordProgression(data.chordProgression);
       }
     } catch (err) {
       console.error(err);

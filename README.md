@@ -44,6 +44,8 @@ yarn start
 
 Open your web browser and navigate to http://localhost:3000 to use the application.
 
+Requires Node.js 20.19+ or 22.12+. To create a production build in `build/`, run `yarn build`.
+
 ## Features
 
 - Generate chord progressions based on complexity level, key, tempo, and length
