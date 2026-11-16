@@ -1,7 +1,7 @@
 // src/components/OutputArea.js
 import React from "react";
 import { FaPlay, FaStop, FaDownload, FaMusic } from "react-icons/fa";
-import ClipLoader from "react-spinners/ClipLoader";
+import { ClipLoader } from "react-spinners";
 
 const OutputArea = ({
   chordProgression,
